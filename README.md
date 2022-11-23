@@ -1,2 +1,6 @@
-# csc174group16
-CSUSCSC174
+# CSC174 Semester Project
+Contributers:
+Krishna Sun
+
+Professor:
+Kathy Applebaum
