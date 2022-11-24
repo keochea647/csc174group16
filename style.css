@@ -8,3 +8,6 @@ td, td {
 th {
     background-color: #96D4D4;
 }
+.error {
+    color: red;
+}
