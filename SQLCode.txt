@@ -1,0 +1,118 @@
+CREATE TABLE USER
+(
+    uid    INT NOT NULL AUTO_INCREMENT,
+    fname  VARCHAR(20),
+    lname  VARCHAR(20),
+    sex    CHAR,
+    street VARCHAR(20),
+    city   VARCHAR(20),
+    state  CHAR(2),
+    zip    CHAR(5),
+    email  VARCHAR(40),
+    PRIMARY KEY (uid)
+);
+CREATE TABLE USER_PHONE
+(
+    uid   INT      NOT NULL,
+    phone CHAR(10) NOT NULL,
+    PRIMARY KEY (uid, phone),
+    FOREIGN KEY (uid) REFERENCES USER (uid)
+);
+CREATE TABLE PRODUCT
+(
+    pid             INT NOT NULL AUTO_INCREMENT,
+    p_name          VARCHAR(20),
+    price           DECIMAL(5, 2),
+    p_descr         VARCHAR(4000),
+    ptype           ENUM ('movie','game'),
+    rotten_tomatoes INT,
+    metacritic      INT,
+    publisher       VARCHAR(30),
+    studio          VARCHAR(30),
+    PRIMARY KEY (pid)
+);
+CREATE TABLE PRODUCT_GENRE
+(
+    pid   INT         NOT NULL,
+    genre VARCHAR(15) NOT NULL,
+    PRIMARY KEY (pid, genre),
+    FOREIGN KEY (pid) REFERENCES PRODUCT (pid)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+CREATE TABLE USER_RENTS_PRODUCT
+(
+    uid        INT NOT NULL,
+    pid        INT NOT NULL,
+    start_date DATE,
+    end_date   DATE,
+    isReturned BOOLEAN,
+    PRIMARY KEY (uid, pid),
+    FOREIGN KEY (uid) REFERENCES USER (uid)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (pid) REFERENCES PRODUCT (pid)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+CREATE TABLE USER_REVIEWS_PRODUCT
+(
+    uid    INT NOT NULL,
+    pid    INT NOT NULL,
+    review VARCHAR(4000),
+    stars  DECIMAL(3, 2),
+    PRIMARY KEY (uid, pid),
+    FOREIGN KEY (uid) REFERENCES USER (uid)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (pid) REFERENCES PRODUCT (pid)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+DELIMITER $$
+create trigger PRODUCT_DISJOINT_INSERT
+    before insert
+    on PRODUCT
+    for each row
+BEGIN
+    IF (NEW.ptype = 'movie' AND (NEW.metacritic IS NOT NULL OR NEW.publisher IS NOT NULL OR NEW.studio IS NOT NULL))
+    THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT =
+                    'Metacritic rating, publisher, and studio attributes are only for video games subclasses';
+    END IF;
+    IF (NEW.ptype = 'game' AND (NEW.rotten_tomatoes IS NOT NULL))
+    THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Rotten tomato attribute is only for movies subclasses';
+    END IF;
+END$$
+
+create trigger PRODUCT_DISJOINT_UPDATE
+    before update
+    on PRODUCT
+    for each row
+BEGIN
+    IF (NEW.ptype = 'movie' AND (NEW.metacritic IS NOT NULL OR NEW.publisher IS NOT NULL OR NEW.studio IS NOT NULL))
+    THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT =
+                    'Cannot update because metacritic rating, publisher, and studio attributes are only for video games subclasses';
+    END IF;
+    IF (NEW.ptype = 'game' AND (NEW.rotten_tomatoes IS NOT NULL))
+    THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cannot update because rotten tomato attribute is only for movies subclasses';
+    END IF;
+END$$
+
+CREATE PROCEDURE currentBorrowCount(IN id INT, OUT borrowCount INT)
+BEGIN
+    SELECT COUNT(*)
+    INTO borrowCount
+    FROM USER_RENTS_PRODUCT
+    WHERE uid = id
+      AND start_date < end_date
+      AND isReturned = 0;
+END$$
+DELIMITER ;
