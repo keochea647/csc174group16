@@ -1,9 +1,6 @@
 <?php
     // database information
-    $servername = "XXXX";
-    $username = "XXXX";
-    $password = "XXXX";
-    $dbname = "XXXX";
+    require("dbCred.php");
 
     // create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
