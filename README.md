@@ -5,7 +5,7 @@ Krishna Sun, Kurtis Tran, Brian Pham
 Professor:
 Kathy Applebaum
 
-Files That Handle SQL:
+Files That Handle SQL: <br />
 sqlConnect.php <br />
 register.php <br />
 table.php <br />
