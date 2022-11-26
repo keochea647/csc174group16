@@ -1,5 +1,11 @@
 <?php
-    // database information
+    /*
+        BELOW: database credentials that's stored in dbCred.php
+        $servername = "XXXX";
+        $username = "XXXX";
+        $password = "XXXX";
+        $dbname = "XXXX";
+    */
     require("dbCred.php");
 
     // create connection
