@@ -9,78 +9,93 @@
         "zipErr"=>"",
         "emailErr"=>""
     );
+    // temp variables to store user's input
     $first = $last = $sex = $street = $city = $state = $zip = $email = "";
-    $submitted = false;
+    
+    // used to determine if input was valid before executing SQL
     $success = true;
 
-    // form validation
+    // upon clicking submit button, do form validation and then execute SQL if valid
     if(isset($_POST['submit'])) {
+        // sql connection code (in another source file)
         require("sqlConnect.php");
-        //$submitted = true;
+
+        // checks if input is empty
         if(empty($_POST['first']) || empty($_POST['last'])) {
             $errors["nameErr"] = "Name required";
             $success = false;
         }
         else {
-            $first = test_input($_POST['first']);
-            $last = test_input($_POST['last']);
+            $first = clean_input($_POST['first']);
+            $last = clean_input($_POST['last']);
+            // ensures only characters and ' are inputted into DB
             if(!preg_match("/^[a-zA-Z-']+$/",$first) || !preg_match("/^[a-zA-Z-']+$/",$last)) {
                 $errors["nameErr"] = "Only letters and ' allowed";
                 $success = false;
             }
         }
+        // checks if input is empty
         if(empty($_POST['street'])) {
             $errors["streetErr"] = "Street required";
             $success = false;
         }
         else {
-            $street = test_input($_POST['street']);
+            $street = clean_input($_POST['street']);
         }
+        // checks if input is empty
         if(empty($_POST['city'])) {
             $errors["cityErr"] = "City required";
             $success = false;
         }
         else {
-            $city = test_input($_POST['city']);
+            $city = clean_input($_POST['city']);
         }
+        // checks if input is empty
         if(empty($_POST['state'])) {
             $errors["stateErr"] = "State required";
             $success = false;
         }
         else {
-            $state = test_input($_POST['state']);
+            $state = clean_input($_POST['state']);
+            // checks if input is 2 characters long and only has characters
             if(strlen($state) != 2 || !preg_match("/^[a-zA-Z]*$/",$state)) {
                 $errors["stateErr"] = "State must be 2 letters";
                 $success = false;
             }
             else {
+                // converts input to upper case since state name abbrev are usually capitalized
                 $state = strtoupper($state);
             }
         }
+        // checks if input is empty
         if(empty($_POST['zip'])) {
             $errors["zipErr"] = "ZIP required";
             $success = false;
         }
         else {
-            $zip = test_input($_POST['zip']);
+            $zip = clean_input($_POST['zip']);
+            // checks if input is 5 integers long
             if(strlen($zip) != 5 || !preg_match('/^[0-9]*$/',$zip)) {
                 $errors["zipErr"] = "ZIP must be 5 integers long";
                 $success = false;
             }
         }
+        // checks if input is empty
         if (empty($_POST["email"])) {
             $errors["emailErr"] = "Email required";
             $success = false;
         } else {
-            $email = test_input($_POST["email"]);
+            $email = clean_input($_POST["email"]);
             // check format of email
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors["emailErr"] = "Invalid email format";
                 $success = false;
             }
         }
+        // no input validation needed since using radio buttons
         $sex = $_POST['sex'];
 
+        // executes code if no invalid inputs
         if($success) {
             // prepare statement & binding parameters and datatype (s=string,i=integer,d=double,b=BLOB)
             $stmt = $conn->prepare("INSERT INTO USER (fname, lname, sex, street, city, state, zip, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -98,7 +113,8 @@
         $conn->close();
     }
 
-    function test_input($data) {
+    // function to clean white space and avoid possible PHP security issues
+    function clean_input($data) {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
@@ -157,6 +173,7 @@
         <input type="submit" name = "submit" value="Register Now!">
     </form>
     <?php
+        // just contains links to navigate to homepage, table with users stored in DB, and registration page
         include('navigation.php');
     ?>
 </body>

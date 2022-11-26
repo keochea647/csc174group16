@@ -5,6 +5,7 @@
     </head>
     <body>
     <h1>Users</h1>
+    <!-- table headers creation -->
     <table>
         <thead>
             <tr>
@@ -20,12 +21,15 @@
             </tr>
         </thead>
         <?php
+            // database connection code (in another source file)
             require("sqlConnect.php");
+            // SQL code to get all users
             $sql = "SELECT * FROM USER";
             $result = $conn->query($sql);
 
+            // checks if there's any records returned
             if ($result->num_rows > 0) {
-                // output data of each row
+                // goes through returned records and adds them to the table
                 while($row = $result->fetch_assoc()) {
                     echo
                         "<tr>
@@ -43,7 +47,10 @@
             } else {
                 echo "0 results";
             }
+            // closes connection
             $conn->close();
+
+            // navigation links (in another source file)
             include("navigation.php");
         ?> 
     </table>
