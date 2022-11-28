@@ -97,14 +97,18 @@
 
         // executes code if no invalid inputs
         if($success) {
-            // prepare statement & binding parameters and datatype (s=string,i=integer,d=double,b=BLOB)
-            $stmt = $conn->prepare("INSERT INTO USER (fname, lname, sex, street, city, state, zip, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssssss", $first, $last, $sex, $street, $city, $state, $zip, $email);
-            $stmt->execute();
-    
-            // close prepared statement
-            $stmt->close();
-            echo "Form successfully submitted";
+            try {
+                // prepare statement & binding parameters and datatype (s=string,i=integer,d=double,b=BLOB)
+                $stmt = $conn->prepare("INSERT INTO USER (fname, lname, sex, street, city, state, zip, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssssssss", $first, $last, $sex, $street, $city, $state, $zip, $email);
+                $stmt->execute();
+                // close prepared statement
+                $stmt->close();
+                echo "Form successfully submitted";
+            } catch(Exception $e) {
+                echo "<b>An error has occurred when trying to execute the query.</b><br/>";
+                echo "<em>" . $e . "</em><br/>";
+            }
         }
         else {
             echo "ERROR! Please fix the marked issues";
