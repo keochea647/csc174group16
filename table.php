@@ -5,7 +5,7 @@
     </head>
     <body>
     <h1>Users</h1>
-    <!-- table headers creation -->
+    <!-- table creation -->
     <?php
         // database connection code (in another source file)
         require("sqlConnect.php");
