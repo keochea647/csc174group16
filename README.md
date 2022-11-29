@@ -6,7 +6,7 @@ Professor:
 Kathy Applebaum
 
 Files That Handle SQL: <br />
-sqlConnect.php <br />
+sqlConnect.php (connection to DB) <br />
 register.php <br />
 table.php <br />
 dbCred.php (not included in GitHub since it contains login information) <br />

@@ -152,7 +152,7 @@
                 <?php echo "<span class='error'>{$errors['cityErr']}</span>";?>
             </p>
             <p>
-                <input type="text" name="state" required placeholder="State (##)" value="<?php echo $state;?>">
+                <input type="text" name="state" required placeholder="State (2 letters)" value="<?php echo $state;?>">
                 <?php echo "<span class='error'>{$errors['stateErr']}</span>";?>
             </p>
             <p>
