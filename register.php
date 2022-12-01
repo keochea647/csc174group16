@@ -1,4 +1,5 @@
 <?php
+
     // error messages
     $errors = array(
         "nameErr"=>"",
@@ -19,7 +20,7 @@
         // sql connection code (in another source file)
         require("sqlConnect.php");
 
-        // checks if input is empty
+        // checks if input is empty (required field)
         if(empty($_POST['first']) || empty($_POST['last'])) {
             $errors["nameErr"] = "Name required";
             $success = false;
@@ -33,26 +34,23 @@
                 $success = false;
             }
         }
-        // checks if input is empty
+        // if empty, just put null (not required field)
         if(empty($_POST['street'])) {
-            $errors["streetErr"] = "Street required";
-            $success = false;
+            $street = null;
         }
         else {
             $street = clean_input($_POST['street']);
         }
-        // checks if input is empty
+        // if empty, just put null (not required field)
         if(empty($_POST['city'])) {
-            $errors["cityErr"] = "City required";
-            $success = false;
+            $city = null;
         }
         else {
             $city = clean_input($_POST['city']);
         }
-        // checks if input is empty
+        // if empty, just put null (not required field)
         if(empty($_POST['state'])) {
-            $errors["stateErr"] = "State required";
-            $success = false;
+            $state = null;
         }
         else {
             $state = clean_input($_POST['state']);
@@ -66,10 +64,9 @@
                 $state = strtoupper($state);
             }
         }
-        // checks if input is empty
+        // if empty, just put null (not required field)
         if(empty($_POST['zip'])) {
-            $errors["zipErr"] = "ZIP required";
-            $success = false;
+            $zip = null;
         }
         else {
             $zip = clean_input($_POST['zip']);
@@ -79,7 +76,7 @@
                 $success = false;
             }
         }
-        // checks if input is empty
+        // checks if input is empty (required field)
         if (empty($_POST["email"])) {
             $errors["emailErr"] = "Email required";
             $success = false;
@@ -132,36 +129,36 @@
     </head>
     <body>
     <h1>Registration</h1>
-    <p>All fields below are required to be filled out in order to register.</p>
+    <p class='error'>* required</p>
     <form action="register.php" method="post">
         <fieldset>
             <p>
                 <legend>Name</legend>
                 <input type="text" name="first" required placeholder="First Name" value="<?php echo $first;?>">
                 <input type="text" name="last" required placeholder="Last Name" value="<?php echo $last;?>">
-                <?php echo "<span class='error'>{$errors['nameErr']}</span>";?>
-            </p>
-            <p>
-                <legend>Address</legend>
-                <input type="text" name="street" required placeholder="Street" value="<?php echo $street;?>">
-                <?php echo "<span class='error'>{$errors['streetErr']}</span>";?>
-            </p>
-            <p>
-                <input type="text" name="city" required placeholder="City" value="<?php echo $city;?>">
-                <?php echo "<span class='error'>{$errors['cityErr']}</span>";?>
-            </p>
-            <p>
-                <input type="text" name="state" required placeholder="State (2 letters)" value="<?php echo $state;?>">
-                <?php echo "<span class='error'>{$errors['stateErr']}</span>";?>
-            </p>
-            <p>
-                <input type="text" name="zip" required placeholder="ZIP (#####)" value="<?php echo $zip;?>">
-                <?php echo "<span class='error'>{$errors['zipErr']}</span>";?>
+                <?php echo "<span class='error'>*{$errors['nameErr']}</span>";?>
             </p>
             <p>
                 <legend>Email</legend>
                 <input type="text" name="email" required placeholder="Email address" value="<?php echo $email;?>">
-                <?php echo "<span class='error'>{$errors['emailErr']}</span>";?>
+                <?php echo "<span class='error'>*{$errors['emailErr']}</span>";?>
+            </p>
+            <p>
+                <legend>Address</legend>
+                <input type="text" name="street" placeholder="Street" value="<?php echo $street;?>">
+                <?php echo "<span class='error'>{$errors['streetErr']}</span>";?>
+            </p>
+            <p>
+                <input type="text" name="city" placeholder="City" value="<?php echo $city;?>">
+                <?php echo "<span class='error'>{$errors['cityErr']}</span>";?>
+            </p>
+            <p>
+                <input type="text" name="state" placeholder="State (2 letters)" value="<?php echo $state;?>">
+                <?php echo "<span class='error'>{$errors['stateErr']}</span>";?>
+            </p>
+            <p>
+                <input type="text" name="zip" placeholder="ZIP (#####)" value="<?php echo $zip;?>">
+                <?php echo "<span class='error'>{$errors['zipErr']}</span>";?>
             </p>
             <p>
                 <legend>Sex</legend>
