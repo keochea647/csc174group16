@@ -100,14 +100,14 @@
                 $stmt->execute();
                 // close prepared statement
                 $stmt->close();
-                echo "Form successfully submitted";
+                echo "<h3>Form successfully submitted</h3>";
             } catch(Exception $e) {
                 echo "<b>An error has occurred when trying to execute the query.</b><br/>";
                 echo "<em>" . $e . "</em><br/>";
             }
         }
         else {
-            echo "ERROR! Please fix the marked issues";
+            echo "<h3 class='error'>ERROR! Please fix the marked issues</h3>";
         }
         // close connection
         $conn->close();
