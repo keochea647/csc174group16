@@ -1,5 +1,4 @@
 <?php
-
     // error messages
     $errors = array(
         "nameErr"=>"",
@@ -20,17 +19,30 @@
         // sql connection code (in another source file)
         require("sqlConnect.php");
 
-        // checks if input is empty (required field)
-        if(empty($_POST['first']) || empty($_POST['last'])) {
-            $errors["nameErr"] = "Name required";
-            $success = false;
+        // get name input & clean
+        $first = clean_input($_POST['first']);
+        $last = clean_input($_POST['last']);
+        // if empty, just put null (not required field)
+        if(empty($first)) {
+            $first = null;
         }
+        // if there's input, clean and then check to see if it's valid
         else {
-            $first = clean_input($_POST['first']);
-            $last = clean_input($_POST['last']);
-            // ensures only characters and ' are inputted into DB
-            if(!preg_match("/^[a-zA-Z-']+$/",$first) || !preg_match("/^[a-zA-Z-']+$/",$last)) {
-                $errors["nameErr"] = "Only letters and ' allowed";
+            // ensures only letters, -, and ' are inputted into DB
+            if(!preg_match("/^[a-zA-Z-']+$/",$first)) {
+                $errors["nameErr"] = "Only letters, -, and ' allowed";
+                $success = false;
+            }
+        }
+        // if empty, just put null (not required field)
+        if(empty($last)) {
+            $last = null;
+        }
+        // if there's input, clean and then check to see if it's valid
+        else {
+            // ensures only letters, -, and ' are inputted into DB
+            if(!preg_match("/^[a-zA-Z-']+$/",$last)) {
+                $errors["nameErr"] = "Only letters, -, and ' allowed";
                 $success = false;
             }
         }
@@ -133,15 +145,15 @@
     <form action="register.php" method="post">
         <fieldset>
             <p>
-                <legend>Name</legend>
-                <input type="text" name="first" required placeholder="First Name" value="<?php echo $first;?>">
-                <input type="text" name="last" required placeholder="Last Name" value="<?php echo $last;?>">
-                <?php echo "<span class='error'>*{$errors['nameErr']}</span>";?>
+                <legend>Email</legend>
+                <input type="text" name="email" required placeholder="example@domain.com" value="<?php echo $email;?>">
+                <?php echo "<span class='error'>*{$errors['emailErr']}</span>";?>
             </p>
             <p>
-                <legend>Email</legend>
-                <input type="text" name="email" required placeholder="Email address" value="<?php echo $email;?>">
-                <?php echo "<span class='error'>*{$errors['emailErr']}</span>";?>
+                <legend>Name</legend>
+                <input type="text" name="first" placeholder="First Name" value="<?php echo $first;?>">
+                <input type="text" name="last" placeholder="Last Name" value="<?php echo $last;?>">
+                <?php echo "<span class='error'>{$errors['nameErr']}</span>";?>
             </p>
             <p>
                 <legend>Address</legend>

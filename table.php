@@ -21,6 +21,7 @@
                 <thead>
                 <tr>
                     <th>UID</th>
+                    <th>Email</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Sex</th>
@@ -28,13 +29,13 @@
                     <th>City</th>
                     <th>State</th>
                     <th>ZIP</th>
-                    <th>Email</th>
                 </tr>";
                 // goes through returned records and adds them to the table
                 while($row = $result->fetch_assoc()) {
                     echo
                         "<tr>
                             <td>{$row['uid']}</td>
+                            <td>{$row['email']}</td>
                             <td>{$row['fname']}</td>
                             <td>{$row['lname']}</td>
                             <td>{$row['sex']}</td>
@@ -42,7 +43,6 @@
                             <td>{$row['city']}</td>
                             <td>{$row['state']}</td>
                             <td>{$row['zip']}</td>
-                            <td>{$row['email']}</td>
                         </tr>\n";
                 }
                 echo "</table>";
