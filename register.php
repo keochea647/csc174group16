@@ -40,9 +40,11 @@
         }
         // if there's input, clean and then check to see if it's valid
         else {
-            // ensures only letters, -, and ' are inputted into DB
-            if(!preg_match("/^[a-zA-Z-']+$/",$last)) {
-                $errors["nameErr"] = "Only letters, -, and ' allowed";
+            $first = clean_input($_POST['first']);
+            $last = clean_input($_POST['last']);
+            // ensures only characters and ' are inputted into DB
+            if(!preg_match("/^[a-zA-Z-']+$/",$first) || !preg_match("/^[a-zA-Z-']+$/",$last)) {
+                $errors["nameErr"] = "Only letters and ' allowed";
                 $success = false;
             }
         }
