@@ -26,7 +26,7 @@
         if(empty($first)) {
             $first = null;
         }
-        // if there's input, clean and then check to see if it's valid
+        // if there's input, check to see if it's valid
         else {
             // ensures only letters, -, and ' are inputted into DB
             if(!preg_match("/^[a-zA-Z-']+$/",$first)) {
@@ -38,36 +38,33 @@
         if(empty($last)) {
             $last = null;
         }
-        // if there's input, clean and then check to see if it's valid
+        // if there's input, check to see if it's valid
         else {
-            $first = clean_input($_POST['first']);
-            $last = clean_input($_POST['last']);
-            // ensures only characters and ' are inputted into DB
-            if(!preg_match("/^[a-zA-Z-']+$/",$first) || !preg_match("/^[a-zA-Z-']+$/",$last)) {
-                $errors["nameErr"] = "Only letters and ' allowed";
+            // ensures only letters, -, and ' are inputted into DB
+            if(!preg_match("/^[a-zA-Z-']+$/",$last)) {
+                $errors["nameErr"] = "Only letters, -, and ' allowed";
                 $success = false;
             }
         }
+        // cleaning input for street
+        $street = clean_input($_POST['street']);
         // if empty, just put null (not required field)
-        if(empty($_POST['street'])) {
+        if(empty($street)) {
             $street = null;
         }
-        else {
-            $street = clean_input($_POST['street']);
-        }
+        // cleaning input for city
+        $city = clean_input($_POST['city']);
         // if empty, just put null (not required field)
-        if(empty($_POST['city'])) {
+        if(empty($city)) {
             $city = null;
         }
-        else {
-            $city = clean_input($_POST['city']);
-        }
+        // cleaning input for state
+        $state = clean_input($_POST['state']);
         // if empty, just put null (not required field)
-        if(empty($_POST['state'])) {
+        if(empty($state)) {
             $state = null;
         }
         else {
-            $state = clean_input($_POST['state']);
             // checks if input is 2 characters long and only has characters
             if(strlen($state) != 2 || !preg_match("/^[a-zA-Z]*$/",$state)) {
                 $errors["stateErr"] = "State must be 2 letters";
@@ -78,24 +75,26 @@
                 $state = strtoupper($state);
             }
         }
+        // cleaning input for zip
+        $zip = clean_input($_POST['zip']);
         // if empty, just put null (not required field)
-        if(empty($_POST['zip'])) {
+        if(empty($zip)) {
             $zip = null;
         }
         else {
-            $zip = clean_input($_POST['zip']);
             // checks if input is 5 integers long
             if(strlen($zip) != 5 || !preg_match('/^[0-9]*$/',$zip)) {
                 $errors["zipErr"] = "ZIP must be 5 integers long";
                 $success = false;
             }
         }
+        // cleaning input for email
+        $email = clean_input($_POST["email"]);
         // checks if input is empty (required field)
-        if (empty($_POST["email"])) {
+        if (empty($email)) {
             $errors["emailErr"] = "Email required";
             $success = false;
         } else {
-            $email = clean_input($_POST["email"]);
             // check format of email
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors["emailErr"] = "Invalid email format";
